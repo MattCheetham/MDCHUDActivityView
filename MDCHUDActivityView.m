@@ -143,6 +143,10 @@
         
     }
     
+    if(activityView.textLabel.text && text){
+        activityView.textLabel.text = text;
+    }
+    
     if(!text && activityView.textLabel.text){
         
         [UIView animateWithDuration:0.65 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
