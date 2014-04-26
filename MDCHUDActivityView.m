@@ -80,7 +80,7 @@
     [activityView showInView:view];
     
     if(style == MDCHUDActivityViewStyleLogo){
-        [activityView playWobbleAnimation];
+        [activityView performSelector:@selector(playWobbleAnimation) withObject:nil afterDelay:1];
     }
 }
 
