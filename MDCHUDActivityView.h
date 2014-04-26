@@ -10,6 +10,8 @@
 
 @interface MDCHUDActivityView : UIView
 
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicatorView;
+
 + (void)startInView:(UIView *)view;
 
 @end

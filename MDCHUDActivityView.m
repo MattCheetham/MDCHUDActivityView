@@ -21,6 +21,11 @@
         background.layer.cornerRadius = 8;
         [self addSubview:background];
         
+        self.activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        [self addSubview:self.activityIndicatorView];
+        [self.activityIndicatorView setFrame:CGRectMake(self.frame.size.width / 2 - 15, self.frame.size.height / 2 - 15, 30, 30)];
+        [self.activityIndicatorView startAnimating];
+        
     }
     return self;
 }
