@@ -12,6 +12,18 @@
 
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicatorView;
 
+/**
+ *  Adds an animated HUD to the centre of the view to indicate loading
+ *
+ *  @param view The view that should present the loading HUD
+ */
 + (void)startInView:(UIView *)view;
+
+/**
+ *  Removes any loading HUD views from the specified view
+ *
+ *  @param view The view which already contains a loading HUD
+ */
++ (void)finishInView:(UIView *)view;
 
 @end

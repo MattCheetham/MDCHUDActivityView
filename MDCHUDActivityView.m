@@ -10,6 +10,7 @@
 
 @implementation MDCHUDActivityView
 
+#pragma mark - Setup
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:CGRectMake(0, 0, 100, 100)];
@@ -29,6 +30,8 @@
     }
     return self;
 }
+
+#pragma mark - Adding
 
 + (void)startInView:(UIView *)view
 {
@@ -65,6 +68,41 @@
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
     
     [self.layer addAnimation:animation forKey:@"popup"];
+}
+#pragma mark - Finding Existing
+
++ (MDCHUDActivityView *)activityInView:(UIView *)view
+{
+    for (MDCHUDActivityView *activityView in view.subviews) {
+        if ([activityView isKindOfClass:[MDCHUDActivityView class]]) {
+            return activityView;
+        }
+    }
+    
+    return nil;
+}
+
+#pragma mark - Removing
+
++ (void)finishInView:(UIView *)view
+{
+    MDCHUDActivityView *activityView = [MDCHUDActivityView activityInView:view];
+    
+    [activityView finish];
+}
+
+- (void)finish
+{
+    [UIView animateWithDuration:0.35 animations:^{
+        
+        self.transform = CGAffineTransformMakeScale(0.01, 0.01);
+        self.alpha = 0.0;
+        
+    } completion:^(BOOL finished) {
+        
+        [self removeFromSuperview];
+        
+    }];
 }
 
 @end
