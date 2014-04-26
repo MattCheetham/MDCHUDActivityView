@@ -161,6 +161,11 @@
     
 }
 
++ (void)removeTextOnActivityViewInView:(UIView *)view
+{
+    [MDCHUDActivityView updateActivityInView:view withText:nil];
+}
+
 #pragma mark - Removing
 
 + (void)finishInView:(UIView *)view

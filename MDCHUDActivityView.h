@@ -55,4 +55,11 @@ typedef NS_ENUM(NSInteger, MDCHUDActivityViewStyle) {
  */
 + (void)updateActivityInView:(UIView *)view withText:(NSString *)text;
 
+/**
+ *  Removes text from the given activity view
+ *
+ *  @param view The view which already contains a loading HUD
+ */
++ (void)removeTextOnActivityViewInView:(UIView *)view;
+
 @end
