@@ -18,7 +18,7 @@
 @implementation MDCHUDActivityView
 
 #pragma mark - Setup
-- (id)initWithFrame:(CGRect)frame
+- (id)init
 {
     self = [super initWithFrame:CGRectMake(0, 0, 100, 100)];
     if (self) {
@@ -34,7 +34,6 @@
         [self.activityIndicatorView startAnimating];
         
         self.textLabel = [UILabel new];
-        self.textLabel.text = @"Loading...";
         self.textLabel.textAlignment = NSTextAlignmentCenter;
         self.textLabel.adjustsFontSizeToFitWidth = YES;
         self.textLabel.textColor = [UIColor whiteColor];
@@ -48,7 +47,13 @@
 
 + (void)startInView:(UIView *)view
 {
-    MDCHUDActivityView *activityView = [[MDCHUDActivityView alloc] initWithFrame:CGRectZero];
+    [MDCHUDActivityView startInView:view text:nil];
+}
+
++ (void)startInView:(UIView *)view text:(NSString *)text
+{
+    MDCHUDActivityView *activityView = [[MDCHUDActivityView alloc] init];
+    activityView.textLabel.text = text;
     
     [activityView showInView:view];
 }
@@ -123,8 +128,13 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    [self.activityIndicatorView setFrame:CGRectMake(self.frame.size.width / 2 - 15, self.frame.size.height / 2 - 15, 30, 30)];
-    self.textLabel.frame = CGRectMake(5, self.frame.size.height - 22, self.frame.size.width - 10, 22);
+    
+    if(self.textLabel.text){
+        [self.activityIndicatorView setFrame:CGRectMake(self.frame.size.width / 2 - 15, self.frame.size.height / 2 - 15 - 11, 30, 30)];
+    } else {
+        [self.activityIndicatorView setFrame:CGRectMake(self.frame.size.width / 2 - 15, self.frame.size.height / 2 - 15, 30, 30)];
+    }
+    self.textLabel.frame = CGRectMake(5, self.frame.size.height - 27, self.frame.size.width - 10, 22);
 }
 
 
