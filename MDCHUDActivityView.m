@@ -87,7 +87,7 @@
     
     [self.layer addAnimation:animation forKey:@"popup"];
 }
-#pragma mark - Finding Existing
+#pragma mark - Modifying existing
 
 + (MDCHUDActivityView *)activityInView:(UIView *)view
 {
@@ -98,6 +98,13 @@
     }
     
     return nil;
+}
+
++ (void)updateActivityInView:(UIView *)view withText:(NSString *)text
+{
+    MDCHUDActivityView *activityView = [MDCHUDActivityView activityInView:view];
+
+    activityView.textLabel.text = text;
 }
 
 #pragma mark - Removing

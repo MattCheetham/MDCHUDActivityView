@@ -32,4 +32,11 @@
  */
 + (void)finishInView:(UIView *)view;
 
+/**
+ *  Updates the text label beneath an already running loading indicator
+ *
+ *  @param view The view which already contains a loading HUD
+ *  @param text The text to replace the existing text with in the view
+ */
++ (void)updateActivityInView:(UIView *)view withText:(NSString *)text;
 @end
