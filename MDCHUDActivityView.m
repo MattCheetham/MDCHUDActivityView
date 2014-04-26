@@ -8,6 +8,13 @@
 
 #import "MDCHUDActivityView.h"
 
+@interface MDCHUDActivityView ()
+
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicatorView;
+@property (nonatomic, strong) UILabel *textLabel;
+
+@end
+
 @implementation MDCHUDActivityView
 
 #pragma mark - Setup
@@ -24,8 +31,14 @@
         
         self.activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         [self addSubview:self.activityIndicatorView];
-        [self.activityIndicatorView setFrame:CGRectMake(self.frame.size.width / 2 - 15, self.frame.size.height / 2 - 15, 30, 30)];
         [self.activityIndicatorView startAnimating];
+        
+        self.textLabel = [UILabel new];
+        self.textLabel.text = @"Loading...";
+        self.textLabel.textAlignment = NSTextAlignmentCenter;
+        self.textLabel.adjustsFontSizeToFitWidth = YES;
+        self.textLabel.textColor = [UIColor whiteColor];
+        [self addSubview:self.textLabel];
         
     }
     return self;
@@ -104,5 +117,15 @@
         
     }];
 }
+
+#pragma mark - Layout
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [self.activityIndicatorView setFrame:CGRectMake(self.frame.size.width / 2 - 15, self.frame.size.height / 2 - 15, 30, 30)];
+    self.textLabel.frame = CGRectMake(5, self.frame.size.height - 22, self.frame.size.width - 10, 22);
+}
+
 
 @end

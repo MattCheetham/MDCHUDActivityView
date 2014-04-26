@@ -10,8 +10,6 @@
 
 @interface MDCHUDActivityView : UIView
 
-@property (nonatomic, strong) UIActivityIndicatorView *activityIndicatorView;
-
 /**
  *  Adds an animated HUD to the centre of the view to indicate loading
  *
