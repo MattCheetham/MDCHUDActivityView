@@ -80,7 +80,7 @@
     [activityView showInView:view];
     
     if(style == MDCHUDActivityViewStyleLogo){
-        [activityView playWobbleAnimation];
+        [activityView performSelector:@selector(performWobblyLogoRotation) withObject:nil afterDelay:1];
     }
 }
 
@@ -143,6 +143,10 @@
         
     }
     
+    if(activityView.textLabel.text && text){
+        activityView.textLabel.text = text;
+    }
+    
     if(!text && activityView.textLabel.text){
         
         [UIView animateWithDuration:0.65 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -155,6 +159,11 @@
         
     }
     
+}
+
++ (void)removeTextOnActivityViewInView:(UIView *)view
+{
+    [MDCHUDActivityView updateActivityInView:view withText:nil];
 }
 
 #pragma mark - Removing
@@ -198,7 +207,7 @@
 
 #pragma mark - Animating
 
-- (void)playWobbleAnimation
+- (void)performWobblyLogoRotation
 {
     // Pop
     CAKeyframeAnimation *animation = [CAKeyframeAnimation
