@@ -56,6 +56,11 @@
             
         }
         
+        if(style == MDCHUDActivityViewStyleMinimal){
+            self.activityIndicatorView.color = [UIColor blackColor];
+            self.textLabel.textColor = [UIColor blackColor];
+        }
+        
     }
     return self;
 }
