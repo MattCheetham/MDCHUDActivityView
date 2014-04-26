@@ -51,9 +51,14 @@
         
         if(style == MDCHUDActivityViewStyleLogo){
             
-            self.logoView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo"]];
+            self.logoView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"MDCLoadingLogo"]];
             [self addSubview:self.logoView];
             
+        }
+        
+        if(style == MDCHUDActivityViewStyleMinimal){
+            self.activityIndicatorView.color = [UIColor blackColor];
+            self.textLabel.textColor = [UIColor blackColor];
         }
         
     }
@@ -229,7 +234,7 @@
     
     [self.logoView.layer addAnimation:animation forKey:@"popup"];
     
-    [self performSelector:@selector(playWobbleAnimation) withObject:nil afterDelay:1.0];
+    [self performSelector:@selector(performWobblyLogoRotation) withObject:nil afterDelay:1.0];
 }
 
 @end
