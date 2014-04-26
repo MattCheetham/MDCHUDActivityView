@@ -8,10 +8,17 @@
 
 #import "MDCHUDActivityView.h"
 
+@interface MDCHUDActivityView ()
+
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicatorView;
+@property (nonatomic, strong) UILabel *textLabel;
+
+@end
+
 @implementation MDCHUDActivityView
 
 #pragma mark - Setup
-- (id)initWithFrame:(CGRect)frame
+- (id)init
 {
     self = [super initWithFrame:CGRectMake(0, 0, 100, 100)];
     if (self) {
@@ -24,8 +31,13 @@
         
         self.activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         [self addSubview:self.activityIndicatorView];
-        [self.activityIndicatorView setFrame:CGRectMake(self.frame.size.width / 2 - 15, self.frame.size.height / 2 - 15, 30, 30)];
         [self.activityIndicatorView startAnimating];
+        
+        self.textLabel = [UILabel new];
+        self.textLabel.textAlignment = NSTextAlignmentCenter;
+        self.textLabel.adjustsFontSizeToFitWidth = YES;
+        self.textLabel.textColor = [UIColor whiteColor];
+        [self addSubview:self.textLabel];
         
     }
     return self;
@@ -35,7 +47,13 @@
 
 + (void)startInView:(UIView *)view
 {
-    MDCHUDActivityView *activityView = [[MDCHUDActivityView alloc] initWithFrame:CGRectZero];
+    [MDCHUDActivityView startInView:view text:nil];
+}
+
++ (void)startInView:(UIView *)view text:(NSString *)text
+{
+    MDCHUDActivityView *activityView = [[MDCHUDActivityView alloc] init];
+    activityView.textLabel.text = text;
     
     [activityView showInView:view];
 }
@@ -69,7 +87,8 @@
     
     [self.layer addAnimation:animation forKey:@"popup"];
 }
-#pragma mark - Finding Existing
+
+#pragma mark - Modifying existing
 
 + (MDCHUDActivityView *)activityInView:(UIView *)view
 {
@@ -80,6 +99,34 @@
     }
     
     return nil;
+}
+
++ (void)updateActivityInView:(UIView *)view withText:(NSString *)text
+{
+    MDCHUDActivityView *activityView = [MDCHUDActivityView activityInView:view];
+
+    if(!activityView.textLabel.text){
+        
+        [UIView animateWithDuration:0.65 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            activityView.activityIndicatorView.frame = CGRectOffset(activityView.activityIndicatorView.frame, 0, -7);
+            activityView.textLabel.text = text;
+            
+        } completion:nil];
+        
+    }
+    
+    if(!text && activityView.textLabel.text){
+        
+        [UIView animateWithDuration:0.65 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            activityView.activityIndicatorView.frame = CGRectOffset(activityView.activityIndicatorView.frame, 0, 7);
+            activityView.textLabel.text = text;
+            
+        } completion:nil];
+        
+    }
+    
 }
 
 #pragma mark - Removing
@@ -104,5 +151,20 @@
         
     }];
 }
+
+#pragma mark - Layout
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    self.activityIndicatorView.frame = CGRectMake(self.frame.size.width / 2 - 15, self.frame.size.height / 2 - 15, 30, 30);
+
+    if(self.textLabel.text){
+        self.activityIndicatorView.frame = CGRectOffset(self.activityIndicatorView.frame, 0, -7);
+    }
+    self.textLabel.frame = CGRectMake(5, self.frame.size.height - 27, self.frame.size.width - 10, 22);
+}
+
 
 @end
