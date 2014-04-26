@@ -80,7 +80,7 @@
     [activityView showInView:view];
     
     if(style == MDCHUDActivityViewStyleLogo){
-        [activityView performSelector:@selector(playWobbleAnimation) withObject:nil afterDelay:1];
+        [activityView performSelector:@selector(performWobblyLogoRotation) withObject:nil afterDelay:1];
     }
 }
 
@@ -202,7 +202,7 @@
 
 #pragma mark - Animating
 
-- (void)playWobbleAnimation
+- (void)performWobblyLogoRotation
 {
     // Pop
     CAKeyframeAnimation *animation = [CAKeyframeAnimation
