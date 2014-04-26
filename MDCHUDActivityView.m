@@ -87,6 +87,7 @@
     
     [self.layer addAnimation:animation forKey:@"popup"];
 }
+
 #pragma mark - Modifying existing
 
 + (MDCHUDActivityView *)activityInView:(UIView *)view
@@ -104,7 +105,15 @@
 {
     MDCHUDActivityView *activityView = [MDCHUDActivityView activityInView:view];
 
-    activityView.textLabel.text = text;
+    if(!activityView.textLabel.text){
+        [UIView animateWithDuration:0.65 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            activityView.activityIndicatorView.frame = CGRectOffset(activityView.activityIndicatorView.frame, 0, -7);
+            activityView.textLabel.text = text;
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
+    
 }
 
 #pragma mark - Removing
@@ -136,10 +145,10 @@
 {
     [super layoutSubviews];
     
+    self.activityIndicatorView.frame = CGRectMake(self.frame.size.width / 2 - 15, self.frame.size.height / 2 - 15, 30, 30);
+
     if(self.textLabel.text){
-        [self.activityIndicatorView setFrame:CGRectMake(self.frame.size.width / 2 - 15, self.frame.size.height / 2 - 15 - 11, 30, 30)];
-    } else {
-        [self.activityIndicatorView setFrame:CGRectMake(self.frame.size.width / 2 - 15, self.frame.size.height / 2 - 15, 30, 30)];
+        self.activityIndicatorView.frame = CGRectOffset(self.activityIndicatorView.frame, 0, -11);
     }
     self.textLabel.frame = CGRectMake(5, self.frame.size.height - 27, self.frame.size.width - 10, 22);
 }
