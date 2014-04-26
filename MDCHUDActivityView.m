@@ -229,7 +229,7 @@
     
     [self.logoView.layer addAnimation:animation forKey:@"popup"];
     
-    [self performSelector:@selector(playWobbleAnimation) withObject:nil afterDelay:1.0];
+    [self performSelector:@selector(performWobblyLogoRotation) withObject:nil afterDelay:1.0];
 }
 
 @end
