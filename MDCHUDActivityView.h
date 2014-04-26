@@ -10,4 +10,6 @@
 
 @interface MDCHUDActivityView : UIView
 
++ (void)startInView:(UIView *)view;
+
 @end
