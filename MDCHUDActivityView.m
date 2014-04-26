@@ -7,37 +7,54 @@
 //
 
 #import "MDCHUDActivityView.h"
+#define DegreesToRadians(x) ((x) * M_PI / 180.0)
 
 @interface MDCHUDActivityView ()
 
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicatorView;
 @property (nonatomic, strong) UILabel *textLabel;
+@property (nonatomic, strong) UIImageView *logoView;
 
 @end
 
 @implementation MDCHUDActivityView
 
 #pragma mark - Setup
-- (id)init
+- (id)initWithStyle:(MDCHUDActivityViewStyle)style
 {
     self = [super initWithFrame:CGRectMake(0, 0, 100, 100)];
     if (self) {
         
-        UIView *background = [[UIView alloc] initWithFrame:self.bounds];
-        background.backgroundColor = [UIColor blackColor];
-        background.alpha = 0.7;
-        background.layer.cornerRadius = 8;
-        [self addSubview:background];
+        if(style != MDCHUDActivityViewStyleMinimal){
+            
+            UIView *background = [[UIView alloc] initWithFrame:self.bounds];
+            background.backgroundColor = [UIColor blackColor];
+            background.alpha = 0.7;
+            background.layer.cornerRadius = 8;
+            [self addSubview:background];
+            
+        }
         
-        self.activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-        [self addSubview:self.activityIndicatorView];
-        [self.activityIndicatorView startAnimating];
+        if(style != MDCHUDActivityViewStyleLogo){
+            
+            self.activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+            [self addSubview:self.activityIndicatorView];
+            [self.activityIndicatorView startAnimating];
+            
+        }
         
         self.textLabel = [UILabel new];
         self.textLabel.textAlignment = NSTextAlignmentCenter;
         self.textLabel.adjustsFontSizeToFitWidth = YES;
         self.textLabel.textColor = [UIColor whiteColor];
         [self addSubview:self.textLabel];
+        
+        if(style == MDCHUDActivityViewStyleLogo){
+            
+            self.logoView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo"]];
+            [self addSubview:self.logoView];
+            
+        }
         
     }
     return self;
@@ -52,10 +69,19 @@
 
 + (void)startInView:(UIView *)view text:(NSString *)text
 {
-    MDCHUDActivityView *activityView = [[MDCHUDActivityView alloc] init];
+    [MDCHUDActivityView startInView:view text:text style:MDCHUDActivityViewStyleDefault];
+}
+
++ (void)startInView:(UIView *)view text:(NSString *)text style:(MDCHUDActivityViewStyle)style
+{
+    MDCHUDActivityView *activityView = [[MDCHUDActivityView alloc] initWithStyle:style];
     activityView.textLabel.text = text;
     
     [activityView showInView:view];
+    
+    if(style == MDCHUDActivityViewStyleLogo){
+        [activityView playWobbleAnimation];
+    }
 }
 
 - (void)showInView:(UIView *)view
@@ -110,6 +136,7 @@
         [UIView animateWithDuration:0.65 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             
             activityView.activityIndicatorView.frame = CGRectOffset(activityView.activityIndicatorView.frame, 0, -7);
+            activityView.logoView.frame = CGRectOffset(activityView.logoView.frame, 0, -7);
             activityView.textLabel.text = text;
             
         } completion:nil];
@@ -121,6 +148,7 @@
         [UIView animateWithDuration:0.65 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             
             activityView.activityIndicatorView.frame = CGRectOffset(activityView.activityIndicatorView.frame, 0, 7);
+            activityView.logoView.frame = CGRectOffset(activityView.logoView.frame, 0, 7);
             activityView.textLabel.text = text;
             
         } completion:nil];
@@ -159,12 +187,40 @@
     [super layoutSubviews];
     
     self.activityIndicatorView.frame = CGRectMake(self.frame.size.width / 2 - 15, self.frame.size.height / 2 - 15, 30, 30);
+    self.logoView.frame = CGRectMake(self.frame.size.width / 2 - 20, self.frame.size.height / 2 - 20, 40, 40);
 
     if(self.textLabel.text){
         self.activityIndicatorView.frame = CGRectOffset(self.activityIndicatorView.frame, 0, -7);
+        self.logoView.frame = CGRectOffset(self.logoView.frame, 0, -7);
     }
     self.textLabel.frame = CGRectMake(5, self.frame.size.height - 27, self.frame.size.width - 10, 22);
 }
 
+#pragma mark - Animating
+
+- (void)playWobbleAnimation
+{
+    // Pop
+    CAKeyframeAnimation *animation = [CAKeyframeAnimation
+                                      animationWithKeyPath:@"transform"];
+    
+    CATransform3D transform1 = CATransform3DMakeRotation(DegreesToRadians(0), 0, 0, 1);
+    CATransform3D transform2 = CATransform3DMakeRotation(DegreesToRadians(135), 0, 0, 1);
+    CATransform3D transform3 = CATransform3DMakeRotation(DegreesToRadians(115), 0, 0, 1);
+    CATransform3D transform4 = CATransform3DMakeRotation(DegreesToRadians(120), 0, 0, 1);
+    
+    NSArray *frameValues = @[[NSValue valueWithCATransform3D:transform1],
+                             [NSValue valueWithCATransform3D:transform2],
+                             [NSValue valueWithCATransform3D:transform3],
+                             [NSValue valueWithCATransform3D:transform4]];
+    [animation setValues:frameValues];
+    
+    animation.duration = 1.0;
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+    
+    [self.logoView.layer addAnimation:animation forKey:@"popup"];
+    
+    [self performSelector:@selector(playWobbleAnimation) withObject:nil afterDelay:1.0];
+}
 
 @end
